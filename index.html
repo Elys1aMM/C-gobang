@@ -240,9 +240,10 @@ function isBoardFull() {
   return true;
 }
 
-function placeStone(r, c) {
+function placeStone(r, c, isAIMove) {
   if (gameOver || board[r][c] !== -1) return false;
-  if (isAI && currentPlayer !== playerColor) return false;
+  // AI模式下：玩家调用要检查回合，AI调用直接放行
+  if (!isAIMove && isAI && currentPlayer !== playerColor) return false;
 
   board[r][c] = currentPlayer;
   history.push({ r, c, color: currentPlayer });
@@ -333,7 +334,7 @@ function getEmptyCells() {
 function aiMove(r, c) {
   if (gameOver) return;
   if (board[r] && board[r][c] === -1) {
-    placeStone(r, c);
+    placeStone(r, c, true);
   }
 }
 
