@@ -294,7 +294,9 @@ function evaluatePosition(r, c, color) {
         blocked++;
     }
     if (len > 5) len = 5;
-    score += SCORE[blocked][len-1] * (color === playerColor ? 4 : 1) + (len > 1 ? 20 : 0);
+    // 进攻(自己)权重×4，防守(对手)权重×1 —— 与 C++ 原版逻辑一致
+    const isAttack = (color === aiColor);
+    score += SCORE[blocked][len-1] * (isAttack ? 4 : 1) + (len > 1 ? 20 : 0);
   }
   board[r][c] = -1;
   return score;
@@ -320,6 +322,14 @@ function findBestMove(color) {
   return candidates[Math.floor(Math.random() * candidates.length)];
 }
 
+function getEmptyCells() {
+  const cells = [];
+  for (let r = 0; r < SIZE; r++)
+    for (let c = 0; c < SIZE; c++)
+      if (board[r][c] === -1) cells.push({r, c});
+  return cells;
+}
+
 function aiMove(r, c) {
   if (gameOver) return;
   if (board[r] && board[r][c] === -1) {
@@ -330,15 +340,27 @@ function aiMove(r, c) {
 function doAIMove() {
   if (gameOver || currentPlayer !== aiColor) return;
   
-  // 开局第一步 AI 先手 → 天元
+  // 开局第一步 → 天元
   if (moveCount === 0) {
     aiMove(7, 7);
+    return;
+  }
+
+  // 防御性：如果只有一个空位直接下
+  const empty = getEmptyCells();
+  if (empty.length === 0) return;
+  if (empty.length === 1) {
+    aiMove(empty[0].r, empty[0].c);
     return;
   }
 
   const move = findBestMove(aiColor);
   if (move) {
     aiMove(move.r, move.c);
+  } else {
+    // 兜底：随机下
+    const fallback = empty[Math.floor(Math.random() * empty.length)];
+    aiMove(fallback.r, fallback.c);
   }
 }
 
