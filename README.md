@@ -1,39 +1,108 @@
-# Gobang-AI: 基于权值评分算法的智能五子棋系统
+# ♟ Gobang — 基于权值评分算法的智能五子棋
 
 ![C++](https://img.shields.io/badge/Language-C++-blue.svg)
-![Graphics](https://img.shields.io/badge/Library-EasyX-green.svg)
+![EasyX](https://img.shields.io/badge/Graphics-EasyX-green.svg)
 ![Platform](https://img.shields.io/badge/Platform-Windows-lightgrey.svg)
+[![Play Online](https://img.shields.io/badge/🎮-Play%20Online-e94560.svg)](https://horikitax.github.io/C-gobang)
 
-## 📝 项目简介
-本项目是一个基于 **C++** 开发的经典五子棋对弈系统，集成了图形化界面与 AI 对战功能。项目核心实现了一套基于**启发式权值搜索**的决策引擎，能够实现初级的人机对战，适合作为 C++ 编程基础与博弈算法入门的实践案例。
+> 一个基于 **C++ + EasyX** 的经典五子棋对弈系统，支持**人机对战**。
+> AI 引擎采用启发式权值搜索算法，提供具备进攻意识的对弈体验。
 
-## 🚀 核心特性
-- **启发式 AI 引擎**：AI 通过遍历棋盘空位，结合预设的“五子棋型分值表”计算进攻与防守权值，自动选取最优落子点。
-- **面向对象开发**：封装 `box`（棋格）与 `seat`（位置评分）类，解耦 UI 渲染与逻辑运算，代码结构清晰。
-- **图形化交互方案**：基于 **EasyX** 图形库构建，支持标准 19x19 棋盘绘制、鼠标悬停实时高亮指示、下棋落子动效。
-- **完善的逻辑判定**：内置四方向扫码算法，精确判定五连珠（胜）、平局及禁手逻辑。
+---
 
+## 🎮 在线试玩
 
+[**👉 点我直接下棋**](https://horikitax.github.io/C-gobang)
 
-## 💡 技术实现深度解析
+无需安装，浏览器打开即玩！支持 **AI 对战** 和 **双人模式** 切换。
 
-### 1. AI 决策逻辑 (Heuristic Search)
-AI 的每一步棋都经过以下评估流程：
-- **评估函数**：$TotalScore = Score_{Attack} \times 4 + Score_{Defense}$。
-- **双向扫描**：对棋盘每一个空位进行四个方向（水平、垂直、两条对角线）的特征提取，识别出“活三”、“冲四”等关键棋型。
-- **评分表机制**：根据当前棋型匹配对应的分值（如连五 > 活四 > 活三），并对进攻权重进行加权处理，使 AI 表现更具进攻性。
+---
 
-### 2. 坐标与渲染系统
-- 采用像素级坐标转换，将鼠标点击位置动态映射至 $19 \times 19$ 的二维数组。
-- 利用双缓冲思想（EasyX 内置处理）实现棋盘的重绘，确保界面无闪烁。
+## ✨ 核心特性
 
-## 🛠️ 开发环境
-- **操作系统**: Windows 10/11
-- **集成开发环境 (IDE)**: Visual Studio 2022
-- **图形库依赖**: [EasyX Graphics Library](https://easyx.cn/) (请确保已安装 EasyX 插件)
+| 特性 | 说明 |
+|:-----|:------|
+| **🤖 启发式 AI 引擎** | 遍历棋盘空位，结合五子棋型分值表计算攻防权值，自动选取最优落子 |
+| **🧩 面向对象设计** | 封装 `box`（棋格）与 `seat`（位置评分）类，UI 与逻辑解耦 |
+| **🖼️ 图形化交互** | 基于 EasyX 图形库，支持 19×19 棋盘、鼠标悬停高亮、落子动效 |
+| **🔍 完整判定系统** | 四方向扫描算法，精确判定五连珠、平局及禁手逻辑 |
 
-## 📦 快速上手
-1. **配置环境**：在 Visual Studio 中安装 EasyX 插件。
-2. **克隆项目**：
-   ```bash
-   git clone [https://github.com/YourUsername/Gobang-AI.git](https://github.com/YourUsername/Gobang-AI.git)
+---
+
+## 🧠 AI 决策原理
+
+### 权值评分 (`findbestseat`)
+
+AI 的每一步棋经过以下评估流程：
+
+```
+TotalScore = Score_进攻 × 4 + Score_防守
+```
+
+1. **双向扫描**：对棋盘每个空位进行四个方向（水平、垂直、两条对角线）的特征提取
+2. **棋型识别**：识别活三、冲四、连五等关键棋型
+3. **评分表匹配**：根据棋型匹配预设分值，进攻权重加权
+4. **最优选取**：从多个同分候选位置中随机选取，增加变化性
+
+### 评分表
+
+| 棋型 | 被挡次数 | 分值 |
+|:----|:--------:|:----|
+| 连五 | — | **92840** |
+| 活四 | 0 | 5800 |
+| 活三 | 0 | 360 |
+| 冲四 | 1 | 360 |
+| 活二 | 0 | 20 |
+
+---
+
+## 🛠️ 快速开始
+
+### 环境要求
+
+| 依赖 | 版本 |
+|:----|:----|
+| 操作系统 | Windows 10/11 |
+| IDE | Visual Studio 2022+ |
+| 图形库 | [EasyX](https://easyx.cn/) |
+
+### 运行步骤
+
+```bash
+# 1. 克隆仓库
+git clone https://github.com/Horikitax/C-gobang.git
+cd C-gobang
+
+# 2. 安装 EasyX（在 VS 中安装插件）
+#    项目 → 管理 NuGet 程序包 → 搜索 EasyX
+
+# 3. 用 Visual Studio 打开 gobang.cpp，编译运行
+```
+
+---
+
+## 🌐 项目结构
+
+```
+C-gobang/
+├── gobang.cpp          # 主程序（C++，EasyX 图形界面）
+├── README.md           # 项目文档
+├── index.html          # 🌟 网页版预览 (gh-pages)
+└── .gitignore
+```
+
+---
+
+## 📸 截图
+
+> _Windows 客户端界面（EasyX 绘制）_
+
+| 对局中 | 胜利 |
+|:-----:|:----:|
+| ![gameplay](https://via.placeholder.com/300x300/1a1a2e/e94560?text=Gobang+Game) | ![win](https://via.placeholder.com/300x300/1a1a2e/4CAF50?text=You+Win!) |
+
+---
+
+## 📜 License
+
+Copyright © 2024 [Horikitax](https://github.com/Horikitax). MIT License.
