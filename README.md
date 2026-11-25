@@ -3,7 +3,7 @@
 ![C++](https://img.shields.io/badge/Language-C++-blue.svg)
 ![EasyX](https://img.shields.io/badge/Graphics-EasyX-green.svg)
 ![Platform](https://img.shields.io/badge/Platform-Windows-lightgrey.svg)
-[![Play Online](https://img.shields.io/badge/Play-Online%20Demo-e94560.svg)](https://yox1no.github.io/C-gobang)
+[![Play Online](https://img.shields.io/badge/Play-Online%20Demo-e94560.svg)](https://elys1amm.github.io/C-gobang)
 
 A classic Gobang (Five-in-a-Row) game implemented in **C++** with the **EasyX** graphics library, featuring a weighted heuristic AI opponent.
 
@@ -11,7 +11,7 @@ A classic Gobang (Five-in-a-Row) game implemented in **C++** with the **EasyX** 
 
 ## Online Demo
 
-[**Play in Browser**](https://yox1no.github.io/C-gobang)
+[**Play in Browser**](https://elys1amm.github.io/C-gobang)
 
 No installation required. Supports both **Player vs. AI** and **Two-Player** modes.
 
@@ -69,7 +69,7 @@ TotalScore = OffensiveScore * 4 + DefensiveScore
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/Yox1no/C-gobang.git
+git clone https://github.com/Elys1aMM/C-gobang.git
 cd C-gobang
 
 # 2. Install EasyX in Visual Studio
@@ -92,4 +92,4 @@ C-gobang/
 
 ## License
 
-Copyright © 2024 [Yox1no](https://github.com/Yox1no). Released under the MIT License.
+Copyright © 2024 [Elys1aMM](https://github.com/Elys1aMM). Released under the MIT License.
