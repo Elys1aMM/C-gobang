@@ -532,6 +532,7 @@
       let gameOver = false;
       let winLine = null;     // [{ r, c }, ...]
       let aiThinking = false;
+      let aiTimer = null;
       let hoverCell = null;   // { r, c }
       let showHeatmap = false;
       let cachedScores = null;
@@ -760,7 +761,8 @@
         if (gameOver || mode !== "ai" || currentTurn === humanColor) return;
         aiThinking = true;
         updateStatus();
-        setTimeout(() => {
+        aiTimer = setTimeout(() => {
+          aiTimer = null;
           const move = findBestMove(currentTurn);
           aiThinking = false;
           if (move) placeStone(move.r, move.c);
@@ -768,7 +770,16 @@
         }, 180);
       }
 
+      function updateLayoutMetrics() {
+        pad = Math.max(24, cssSize * 0.062);
+        cell = (cssSize - pad * 2) / (N - 1);
+      }
+
       function resetGame() {
+        if (aiTimer) {
+          clearTimeout(aiTimer);
+          aiTimer = null;
+        }
         board = createBoard(N);
         history = [];
         currentTurn = 1;
@@ -777,6 +788,7 @@
         aiThinking = false;
         hoverCell = null;
         cachedScores = null;
+        updateLayoutMetrics();
         updateStatus();
         draw();
         if (mode === "ai" && humanColor === 0) {
@@ -791,8 +803,7 @@
         canvas.width = Math.round(cssSize * dpr);
         canvas.height = Math.round(cssSize * dpr);
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        pad = Math.max(24, cssSize * 0.062);
-        cell = (cssSize - pad * 2) / (N - 1);
+        updateLayoutMetrics();
         draw();
       }
 
@@ -947,8 +958,9 @@
 
         // Placed stones
         for (let r = 0; r < N; r++) {
+          if (!board[r]) continue;
           for (let c = 0; c < N; c++) {
-            if (board[r][c] !== -1) {
+            if (board[r][c] === 0 || board[r][c] === 1) {
               drawStone(pad + c * cell, pad + r * cell, board[r][c], radius, 1);
             }
           }
@@ -1050,7 +1062,12 @@
         const container = document.getElementById(containerId);
         container.addEventListener("click", (e) => {
           const btn = e.target.closest("button");
-          if (!btn) return;
+          if (!btn || btn.classList.contains("active")) return;
+          if (history.length > 0 && !gameOver) {
+            if (!window.confirm("This will clear the current game and start a new one. Continue?")) {
+              return;
+            }
+          }
           container.querySelectorAll("button").forEach(b => b.classList.remove("active"));
           btn.classList.add("active");
           onSelect(btn.dataset[attr]);
@@ -1070,7 +1087,6 @@
 
       bindSegmented("sizeControl", "size", (val) => {
         N = Number(val);
-        resizeCanvas();
         resetGame();
       });
 
